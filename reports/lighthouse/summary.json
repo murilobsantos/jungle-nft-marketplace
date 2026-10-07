@@ -1,0 +1,49 @@
+{
+  "environment": {
+    "date": "2026-10-07T22:45:31.761Z",
+    "node": "v24.19.0",
+    "os": "win32 10.0.26200",
+    "cpu": "AMD Ryzen 5 5500                               ",
+    "lighthouse": "13.5.0",
+    "playwright": "1.64.0",
+    "mocks": "standard, latency 180 ms; local fonts and images; optimized build"
+  },
+  "results": {
+    "inicio-mobile": {
+      "performance": 91,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "LCP": 3095.9577,
+      "CLS": 0,
+      "TBT": 110
+    },
+    "inicio-desktop": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "LCP": 710.21865,
+      "CLS": 0,
+      "TBT": 0
+    },
+    "detalhe-mobile": {
+      "performance": 90,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "LCP": 3275.6978,
+      "CLS": 0.0007445924395229217,
+      "TBT": 117.5
+    },
+    "detalhe-desktop": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100,
+      "LCP": 771.2825,
+      "CLS": 0,
+      "TBT": 0
+    }
+  }
+}

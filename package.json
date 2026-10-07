@@ -1,0 +1,66 @@
+{
+  "name": "jungle-nft-marketplace",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "dev:mocks": "vite --mode mocks",
+    "lint": "eslint .",
+    "format": "prettier --write src tests scripts *.ts *.json *.mjs",
+    "test:e2e": "playwright test",
+    "test:visual": "playwright test visual.spec.ts",
+    "audit": "node scripts/audit.mjs"
+  },
+  "dependencies": {
+    "@fontsource/roboto-mono": "^5.3.0",
+    "@radix-ui/react-dialog": "^1.2.0",
+    "@radix-ui/react-slot": "^1.4.0",
+    "@tanstack/react-query": "^5.90.0",
+    "@tanstack/react-router": "^1.132.0",
+    "axios": "^1.12.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.468.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "socket.io": "^4.8.4",
+    "socket.io-client": "^4.8.1",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.7.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@eslint/js": "^10.0.1",
+    "@mswjs/socket.io-binding": "^0.2.0",
+    "@playwright/test": "^1.64.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^10.12.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "lighthouse": "^13.5.0",
+    "msw": "^2.10.2",
+    "prettier": "^3.9.9",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.1",
+    "vite": "^6.3.5"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "msw@2.10.2": true
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}
