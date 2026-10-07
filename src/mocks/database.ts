@@ -117,6 +117,66 @@ function seed(): Database {
     scenario: { ...defaultScenario },
   };
 }
+function record(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+function restore(value: unknown): Database {
+  const fresh = seed();
+  if (!record(value)) return fresh;
+
+  const carts: Record<string, Cart> = {};
+  if (record(value.carts)) {
+    for (const [owner, candidate] of Object.entries(value.carts)) {
+      if (!record(candidate)) continue;
+      carts[owner] = {
+        items: Array.isArray(candidate.items)
+          ? (candidate.items as Cart["items"])
+          : [],
+        version:
+          typeof candidate.version === "number" ? candidate.version : 1,
+        coupon: typeof candidate.coupon === "string" ? candidate.coupon : "",
+      };
+    }
+  }
+
+  const users = Array.isArray(value.users)
+    ? value.users.filter(record).map((candidate) => ({
+        ...candidate,
+        favorites: Array.isArray(candidate.favorites)
+          ? candidate.favorites
+          : [],
+        wallets: Array.isArray(candidate.wallets) ? candidate.wallets : [],
+      }))
+    : [];
+  const orders = Array.isArray(value.orders)
+    ? value.orders.filter(
+        (candidate) =>
+          record(candidate) &&
+          record(candidate.quote) &&
+          Array.isArray(candidate.quote.items),
+      )
+    : [];
+
+  return {
+    nfts:
+      Array.isArray(value.nfts) && value.nfts.length
+        ? (value.nfts as Nft[])
+        : fresh.nfts,
+    users: users as User[],
+    sessions: record(value.sessions)
+      ? (value.sessions as Database["sessions"])
+      : {},
+    carts,
+    orders: orders as Order[],
+    attempts: record(value.attempts)
+      ? (value.attempts as Database["attempts"])
+      : {},
+    scenario: {
+      ...defaultScenario,
+      ...(record(value.scenario) ? value.scenario : {}),
+    } as Scenario,
+  };
+}
 export let db: Database;
 export function persist() {
   localStorage.setItem(STORAGE, JSON.stringify(db));
@@ -124,7 +184,7 @@ export function persist() {
 export async function initialize() {
   const stored = localStorage.getItem(STORAGE);
   try {
-    db = stored ? JSON.parse(stored) : seed();
+    db = stored ? restore(JSON.parse(stored)) : seed();
   } catch {
     db = seed();
   }
@@ -166,6 +226,7 @@ export async function initialize() {
     persist();
   }
   settleOrders();
+  persist();
 }
 export function reset() {
   db = seed();
