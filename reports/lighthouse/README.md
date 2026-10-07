@@ -4,17 +4,17 @@ Três medições por página/perfil; mediana. Build otimizado, cenário padrão,
 
 | Página/perfil | Performance | Accessibility | Best Practices | SEO | LCP (ms) | CLS | TBT (ms) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| inicio-mobile | 91 | 100 | 100 | 100 | 3096 | 0.000 | 110 |
-| inicio-desktop | 100 | 100 | 100 | 100 | 710 | 0.000 | 0 |
-| detalhe-mobile | 90 | 100 | 100 | 100 | 3276 | 0.001 | 118 |
-| detalhe-desktop | 100 | 100 | 100 | 100 | 771 | 0.000 | 0 |
+| inicio-mobile | 91 | 100 | 100 | 100 | 3106 | 0.000 | 123 |
+| inicio-desktop | 100 | 100 | 100 | 100 | 716 | 0.000 | 2 |
+| detalhe-mobile | 90 | 100 | 100 | 100 | 3259 | 0.001 | 78 |
+| detalhe-desktop | 100 | 100 | 100 | 100 | 767 | 0.000 | 0 |
 
 Ambiente e versões: [summary.json](summary.json). Metas: 90/95/95/90. Relatórios individuais HTML e JSON neste diretório.
 
 ## Análise
 
-As quatro medianas atingem as metas. O detalhe mobile teve uma medição de performance 86; as outras foram 90 e 90, resultando na mediana 90. Todas as medições foram mantidas. O perfil mobile usa a simulação padrão de rede/CPU do Lighthouse e uma viewport de 390 × 844; desktop usa 1440 × 1000 e os parâmetros versionados.
+Todas as medianas atendem às metas do desafio. Medição individual abaixo da meta: detalhe-mobile-1, performance 89 (meta 90). A avaliação solicitada usa a mediana das três rodadas, e todos os resultados foram preservados.
 
-O caminho inicial inclui JavaScript da SPA, inicialização do MSW/Service Worker e resposta do catálogo/detalhe com latência padrão de 180 ms. O build estima 163 KB gzip para o módulo principal e 95 KB gzip para os mocks. Isso explica LCP de cerca de 3,1–3,3 s no mobile, mesmo com CLS próximo de zero. A variação de trabalho de CPU nas medições pode alterar o TBT. Os JSON individuais registram a decomposição de LCP e os dados de cada rodada.
+O caminho crítico inclui o JavaScript da SPA, a inicialização do MSW/Service Worker e a resposta simulada com 180 ms de latência. Esses custos explicam o LCP maior no perfil mobile; a variação de CPU entre rodadas também afeta o TBT. CLS permanece próximo de zero.
 
-Foram aplicados carregamento sob demanda de conta/carrinho/checkout/diálogos, fontes locais pré-carregadas, imagens WebP responsivas e placeholders sem reutilização de caixas incompatíveis. Os mocks, o Socket.IO, todas as imagens e as funcionalidades permanecem ativos durante a auditoria; não há uma versão simplificada para melhorar os resultados.
+Mocks, Socket.IO, imagens e fontes locais permanecem ativos durante a auditoria. Não há uma versão simplificada exclusiva para Lighthouse. O ambiente, as versões, LCP, CLS e TBT estão registrados em [summary.json](summary.json).

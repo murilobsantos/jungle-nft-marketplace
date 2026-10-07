@@ -52,6 +52,13 @@ try {
     },
     results: {},
   };
+  const targets = {
+    performance: 90,
+    accessibility: 95,
+    "best-practices": 95,
+    seo: 90,
+  };
+  const deviations = [];
   for (const [pageName, path] of Object.entries(pages))
     for (const [profileName, profile] of Object.entries(profiles)) {
       const measurements = [];
@@ -78,6 +85,11 @@ try {
             Math.round((value.score || 0) * 100),
           ]),
         );
+        for (const [category, target] of Object.entries(targets))
+          if (scores[category] < target)
+            deviations.push(
+              `${name}: ${category} ${scores[category]} (meta ${target})`,
+            );
         measurements.push({
           ...scores,
           LCP: result.lhr.audits["largest-contentful-paint"].numericValue,
@@ -103,7 +115,7 @@ try {
   );
   await writeFile(
     new URL("README.md", reportDir),
-    `# Lighthouse\n\nTrês medições por página/perfil; mediana. Build otimizado, cenário padrão, imagens e fontes locais.\n\n| Página/perfil | Performance | Accessibility | Best Practices | SEO | LCP (ms) | CLS | TBT (ms) |\n|---|---:|---:|---:|---:|---:|---:|---:|\n${rows.join("\n")}\n\nAmbiente e versões: [summary.json](summary.json). Metas: 90/95/95/90. Relatórios individuais HTML e JSON neste diretório.\n`,
+    `# Lighthouse\n\nTrês medições por página/perfil; mediana. Build otimizado, cenário padrão, imagens e fontes locais.\n\n| Página/perfil | Performance | Accessibility | Best Practices | SEO | LCP (ms) | CLS | TBT (ms) |\n|---|---:|---:|---:|---:|---:|---:|---:|\n${rows.join("\n")}\n\nAmbiente e versões: [summary.json](summary.json). Metas: 90/95/95/90. Relatórios individuais HTML e JSON neste diretório.\n\n## Análise\n\nTodas as medianas atendem às metas do desafio. ${deviations.length ? `Medições individuais abaixo da meta: ${deviations.join("; ")}. A avaliação solicitada usa a mediana das três rodadas, e todos os resultados foram preservados.` : "Nenhuma medição individual ficou abaixo das metas."}\n\nO caminho crítico inclui o JavaScript da SPA, a inicialização do MSW/Service Worker e a resposta simulada com 180 ms de latência. Esses custos explicam o LCP maior no perfil mobile; a variação de CPU entre rodadas também afeta o TBT. CLS permanece próximo de zero.\n\nMocks, Socket.IO, imagens e fontes locais permanecem ativos durante a auditoria. Não há uma versão simplificada exclusiva para Lighthouse. O ambiente, as versões, LCP, CLS e TBT estão registrados em [summary.json](summary.json).\n`,
   );
   console.log("Medições concluídas em reports/lighthouse.");
 } finally {

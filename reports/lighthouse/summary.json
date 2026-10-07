@@ -1,6 +1,6 @@
 {
   "environment": {
-    "date": "2026-10-07T22:45:31.761Z",
+    "date": "2026-10-07T23:19:26.333Z",
     "node": "v24.19.0",
     "os": "win32 10.0.26200",
     "cpu": "AMD Ryzen 5 5500                               ",
@@ -14,34 +14,34 @@
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100,
-      "LCP": 3095.9577,
+      "LCP": 3106.37875,
       "CLS": 0,
-      "TBT": 110
+      "TBT": 123
     },
     "inicio-desktop": {
       "performance": 100,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100,
-      "LCP": 710.21865,
+      "LCP": 716.1485999999999,
       "CLS": 0,
-      "TBT": 0
+      "TBT": 2
     },
     "detalhe-mobile": {
       "performance": 90,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100,
-      "LCP": 3275.6978,
+      "LCP": 3258.69115,
       "CLS": 0.0007445924395229217,
-      "TBT": 117.5
+      "TBT": 77.5
     },
     "detalhe-desktop": {
       "performance": 100,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100,
-      "LCP": 771.2825,
+      "LCP": 766.8700499999999,
       "CLS": 0,
       "TBT": 0
     }
