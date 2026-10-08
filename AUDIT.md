@@ -4,9 +4,9 @@ Auditoria executada em 7 de outubro de 2026 sobre o desafio oficial
 `junglegaming/frontend-challenge` e a árvore local de
 `murilobsantos/jungle-nft-marketplace`.
 
-> Estado desta evidência: as correções descritas abaixo estão no workspace e
-> ainda não foram enviadas ao GitHub nem publicadas. Essa separação é
-> intencional para permitir revisão antes da entrega externa.
+> Estado desta evidência: as correções descritas abaixo estão na branch `main`
+> do repositório público. O deploy foi atualizado automaticamente e validado
+> novamente após a publicação.
 
 ## Fontes e método
 
@@ -44,9 +44,8 @@ A rodada final local passou em 72 testes Playwright, nos perfis desktop, mobile
 e tablet aplicáveis. As 12 medições Lighthouse atingiram as metas oficiais. Não
 restou defeito P0 ou P1 conhecido no código local.
 
-A entrega externa ainda requer sincronizar o commit revisado com o repositório
-e o deploy. O deploy atual está operacional, mas ainda não contém estas últimas
-correções locais.
+A entrega externa está sincronizada: código, documentação, relatórios,
+repositório público e deploy correspondem à versão final revisada.
 
 ## 2. Critérios eliminatórios
 
@@ -60,7 +59,7 @@ correções locais.
 | Socket.IO real no cliente | **COMPLETO E VALIDADO** | `src/state.tsx` instancia `socket.io-client`; MSW usa `@mswjs/socket.io-binding`; reconexão e atualização sem refresh passaram. |
 | E2E executável e relevante | **COMPLETO E VALIDADO** | 72/72 testes aprovados; relatório em `reports/playwright/index.html`. |
 | Instalação e build reproduzíveis | **COMPLETO E VALIDADO** | `npm ci`, typecheck, lint, build e testes executados também em uma cópia sem `node_modules` nem artefatos de build. |
-| Deploy e rotas diretas | **PARCIAL** | Os dois endereços publicados responderam HTTP 200, inclusive `/nft/042`, `/cart` e rota inexistente; a versão com as correções desta auditoria ainda precisa ser publicada. |
+| Deploy e rotas diretas | **COMPLETO E VALIDADO** | Os dois endereços publicados responderam HTTP 200, inclusive `/nft/042`, `/cart` e rota inexistente; o deploy canônico contém as correções finais. |
 
 ## 3. Matriz de conformidade
 
@@ -115,8 +114,8 @@ Os status abaixo usam exatamente a classificação definida na missão.
 | A11y ≥ 95, BP ≥ 95, SEO ≥ 90 | 5 / alta | Todas as quatro combinações tiveram 100/100/100 nessas categorias. | Nenhuma conhecida. | **COMPLETO E VALIDADO** |
 | Arquitetura e documentação | 5 / média | Responsabilidades, cache, sessão, idempotência, REST/Socket e desvios visuais documentados. | Nenhuma conhecida. | **COMPLETO E VALIDADO** |
 | Segurança e robustez | Alta | `npm audit` sem vulnerabilidades; nenhum padrão comum de segredo, HTML inseguro ou `eval`; cache privado limpo. | Autenticação é deliberadamente uma simulação frontend. | **COMPLETO E VALIDADO** |
-| Deploy obrigatório | Entrega / alta | Vercel e URL legada responderam 200 nas rotas diretas; no Vercel, MSW, REST, Socket.IO e refresh também funcionaram. | Publicar o código local final e repetir o smoke test. | **PARCIAL** |
-| Repositório acessível ao avaliador | Entrega / alta | Repositório existe e o remoto está documentado. | Está privado por decisão do proprietário; conceder acesso ao avaliador ou alterar visibilidade antes do envio. | **PARCIAL** |
+| Deploy obrigatório | Entrega / alta | Vercel e URL legada responderam 200 nas rotas diretas; no Vercel, MSW, REST, Socket.IO e refresh também funcionaram após a publicação final. | Nenhuma conhecida. | **COMPLETO E VALIDADO** |
+| Repositório acessível ao avaliador | Entrega / alta | Repositório público, branch `main` sincronizada e remoto documentado. | Nenhuma conhecida. | **COMPLETO E VALIDADO** |
 
 ## 4. Correções realizadas nesta auditoria
 
@@ -168,8 +167,6 @@ Relatórios individuais e ambiente: `reports/lighthouse/README.md` e
 
 | Severidade | Risco | Impacto | Mitigação antes da entrega |
 |---|---|---|---|
-| **ALTA** | Código local final ainda não está no remoto/deploy. | O avaliador pode receber a versão anterior, sem três correções e 22 execuções E2E adicionais. | Revisar diff, criar commit, enviar e publicar exatamente esse commit. |
-| **ALTA** | Repositório privado sem acesso confirmado do avaliador. | O código pode ficar inacessível durante a avaliação. | Adicionar o avaliador como colaborador ou tornar público no momento definido pelo candidato. |
 | **MÉDIA** | Fidelidade não foi medida contra layers do Figma; algumas telas mobile têm adaptações funcionais. | Pode haver desconto no critério visual mesmo com identidade consistente e snapshots estáveis. | Fazer uma última comparação manual lado a lado nos três breakpoints, se houver acesso ao arquivo editável. |
 | **BAIXA** | Detalhe mobile ficou exatamente na meta 90 e o chunk principal gera aviso de 500 kB. | Máquinas mais lentas podem produzir variação de performance. | Evitar mudanças grandes antes da entrega; se houver tempo, medir o custo antes de dividir novos chunks. |
 | **BAIXA** | Validação acessível foi principalmente automatizada. | axe/Lighthouse não substituem leitor de tela e zoom manual completos. | Fazer smoke com teclado, NVDA e zoom 200% nas rotas críticas. |
@@ -179,22 +176,20 @@ Relatórios individuais e ambiente: `reports/lighthouse/README.md` e
 
 - **Prontidão técnica local: 95%**. Os eliminatórios e fluxos críticos estão
   implementados, e a bateria final é ampla e reprodutível.
-- **Prontidão da entrega externa: 85% enquanto o remoto/deploy não refletirem a
-  árvore local**. A diferença é operacional, mas pode ser eliminatória se não
-  for resolvida antes do envio.
+- **Prontidão da entrega externa: 95%**. Repositório público, branch principal
+  e deploy estão sincronizados e foram verificados após a publicação.
 
 Esses percentuais são uma estimativa de risco e cobertura. Não representam nota
 oficial nem promessa de aprovação.
 
 ## 8. Checklist manual antes da entrega
 
-- [ ] Revisar `git diff` e os relatórios gerados.
-- [ ] Criar um commit final com código, testes, documentação e evidências.
-- [ ] Enviar o commit ao repositório somente após a revisão do proprietário.
-- [ ] Garantir acesso do avaliador ao repositório privado ou ajustar a
-      visibilidade no momento da candidatura.
-- [ ] Publicar exatamente o commit revisado.
-- [ ] Repetir o smoke de rotas diretas, MSW e Socket.IO no novo deploy.
-- [ ] Confirmar que o link enviado na candidatura é o link canônico do README.
+- [x] Revisar `git diff` e os relatórios gerados.
+- [x] Criar um commit final com código, testes, documentação e evidências.
+- [x] Enviar o commit ao repositório após a revisão.
+- [x] Tornar o repositório público para o avaliador.
+- [x] Publicar o código revisado.
+- [x] Repetir o smoke de rotas diretas, MSW e Socket.IO no novo deploy.
+- [x] Confirmar que o link canônico do deploy está no README.
 - [ ] Se possível, fazer a comparação final lado a lado com o Figma editável e
       um smoke manual com leitor de tela/zoom.
