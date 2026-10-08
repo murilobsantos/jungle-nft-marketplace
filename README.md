@@ -78,7 +78,7 @@ As artes originais têm versões WebP e recortes de 400 px para os cards. Para r
 
 ### Verificação da entrega
 
-Build, TypeScript e ESLint concluídos. Playwright: **72 testes passaram**, incluindo migração defensiva de dados persistidos, isolamento entre contas, histórico do catálogo, URL inválida, reconexão Socket.IO, axe-core e 12 comparações visuais em desktop, tablet e mobile, sem atualização de snapshots na rodada final. O relatório HTML está em [reports/playwright/index.html](reports/playwright/index.html). As baselines representam a implementação revisada a partir dos frames PNG; não são uma comparação automática contra layers do Figma.
+Build, TypeScript e ESLint concluídos. Playwright: **74 testes passaram**, incluindo normalização defensiva do carrinho, migração de dados persistidos, isolamento entre contas, histórico do catálogo, URL inválida, reconexão Socket.IO, axe-core e 12 comparações visuais em desktop, tablet e mobile, sem atualização de snapshots na rodada final. O relatório HTML está em [reports/playwright/index.html](reports/playwright/index.html). As baselines representam a implementação revisada a partir dos frames PNG; não são uma comparação automática contra layers do Figma.
 
 As medianas de três medições por página/perfil e os relatórios individuais estão em [reports/lighthouse/README.md](reports/lighthouse/README.md).
 

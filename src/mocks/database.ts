@@ -247,7 +247,17 @@ export function reset() {
   return initialize();
 }
 export function cartFor(owner: string): Cart {
-  return (db.carts[owner] ||= { items: [], version: 1, coupon: "" });
+  const current = db.carts[owner];
+  if (current && Array.isArray(current.items)) return current;
+  const repaired = {
+    items: [],
+    version:
+      current && typeof current.version === "number" ? current.version : 1,
+    coupon: current && typeof current.coupon === "string" ? current.coupon : "",
+  };
+  db.carts[owner] = repaired;
+  persist();
+  return repaired;
 }
 export function available(nftId: string) {
   const nft = db.nfts.find((item) => item.id === nftId);

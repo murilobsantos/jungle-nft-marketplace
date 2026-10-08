@@ -1,4 +1,13 @@
 import { expect, test } from "@playwright/test";
+import { normalizeCart } from "../src/lib/api";
+
+test("normaliza resposta legada do carrinho antes da renderização", () => {
+  expect(normalizeCart({ version: 7, coupon: "KURIO10" })).toEqual({
+    items: [],
+    version: 7,
+    coupon: "KURIO10",
+  });
+});
 
 test("recupera dados persistidos por uma versão anterior", async ({ page }) => {
   await page.addInitScript(() => {

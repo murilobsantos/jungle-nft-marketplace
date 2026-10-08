@@ -55,6 +55,31 @@ export function errorMessage(error: unknown) {
       ? error.message
       : "Não foi possível concluir a operação.";
 }
+export function normalizeCart(value: unknown): Cart {
+  const candidate =
+    typeof value === "object" && value !== null ? (value as Partial<Cart>) : {};
+  const items = Array.isArray(candidate.items)
+    ? candidate.items.filter(
+        (item): item is CartItem =>
+          typeof item === "object" &&
+          item !== null &&
+          typeof item.nftId === "string" &&
+          typeof item.edition === "string" &&
+          typeof item.quantity === "number" &&
+          Number.isInteger(item.quantity) &&
+          item.quantity > 0,
+      )
+    : [];
+  return {
+    items,
+    version:
+      typeof candidate.version === "number" &&
+      Number.isFinite(candidate.version)
+        ? candidate.version
+        : 1,
+    coupon: typeof candidate.coupon === "string" ? candidate.coupon : "",
+  };
+}
 export const rest = {
   catalog: async (params: CatalogSearch, signal?: AbortSignal) =>
     (await api.get<CatalogResponse>("/nfts", { params, signal })).data,
@@ -77,15 +102,18 @@ export const rest = {
   logout: async () => {
     await api.post("/logout");
   },
-  cart: async () => (await api.get<Cart>("/cart")).data,
+  cart: async () => normalizeCart((await api.get<unknown>("/cart")).data),
   cartItem: async (item: CartItem) =>
-    (await api.put<Cart>("/cart/items", item)).data,
+    normalizeCart((await api.put<unknown>("/cart/items", item)).data),
   addCart: async (item: CartItem) =>
-    (await api.post<Cart>("/cart/items", item)).data,
+    normalizeCart((await api.post<unknown>("/cart/items", item)).data),
   removeCart: async (nftId: string, edition: string) =>
-    (await api.delete<Cart>("/cart/items", { data: { nftId, edition } })).data,
+    normalizeCart(
+      (await api.delete<unknown>("/cart/items", { data: { nftId, edition } }))
+        .data,
+    ),
   coupon: async (code: string) =>
-    (await api.put<Cart>("/cart/coupon", { code })).data,
+    normalizeCart((await api.put<unknown>("/cart/coupon", { code })).data),
   quote: async () => (await api.get<Quote>("/quote")).data,
   favorites: async () => (await api.get<string[]>("/favorites")).data,
   favoriteNfts: async () => (await api.get<Nft[]>("/favorites/nfts")).data,

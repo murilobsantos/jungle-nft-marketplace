@@ -1,6 +1,6 @@
 # Auditoria técnica final
 
-Auditoria executada em 7 de outubro de 2026 sobre o desafio oficial
+Auditoria concluída em 8 de outubro de 2026 sobre o desafio oficial
 `junglegaming/frontend-challenge` e a árvore local de
 `murilobsantos/jungle-nft-marketplace`.
 
@@ -40,7 +40,7 @@ A auditoria encontrou e corrigiu três defeitos reproduzíveis:
 3. uma estrutura parcialmente corrompida no carrinho persistido podia chegar à
    interface e causar erro em tempo de execução.
 
-A rodada final local passou em 72 testes Playwright, nos perfis desktop, mobile
+A rodada final local passou em 74 testes Playwright, nos perfis desktop, mobile
 e tablet aplicáveis. As 12 medições Lighthouse atingiram as metas oficiais. Não
 restou defeito P0 ou P1 conhecido no código local.
 
@@ -57,7 +57,7 @@ repositório público e deploy correspondem à versão final revisada.
 | Confirmação dependente da simulação | **COMPLETO E VALIDADO** | Casos confirmado, recusado, pendente, timeout e revalidação passaram; o recibo só é exibido para pedido confirmado. |
 | Isolamento entre usuários | **COMPLETO E VALIDADO** | Testes de troca de conta cobrem carrinho, favoritos, pedidos, perfil e carteiras; acesso ao pedido alheio retorna erro. |
 | Socket.IO real no cliente | **COMPLETO E VALIDADO** | `src/state.tsx` instancia `socket.io-client`; MSW usa `@mswjs/socket.io-binding`; reconexão e atualização sem refresh passaram. |
-| E2E executável e relevante | **COMPLETO E VALIDADO** | 72/72 testes aprovados; relatório em `reports/playwright/index.html`. |
+| E2E executável e relevante | **COMPLETO E VALIDADO** | 74/74 testes aprovados; relatório em `reports/playwright/index.html`. |
 | Instalação e build reproduzíveis | **COMPLETO E VALIDADO** | `npm ci`, typecheck, lint, build e testes executados também em uma cópia sem `node_modules` nem artefatos de build. |
 | Deploy e rotas diretas | **COMPLETO E VALIDADO** | Os dois endereços publicados responderam HTTP 200, inclusive `/nft/042`, `/cart` e rota inexistente; o deploy canônico contém as correções finais. |
 
@@ -123,8 +123,9 @@ Os status abaixo usam exatamente a classificação definida na missão.
 |---|---|---|
 | `src/pages/Catalog.tsx` | Sincroniza o rascunho da busca e o range de preço quando os search params mudam. | `back` e `forward` atualizavam resultados/URL, mas deixavam controles visuais com o valor mais novo. |
 | `src/routeTree.tsx` | Valida allowlists de categoria/rede, faixa monetária, ordenação, aba e intervalo coerente. | Entradas arbitrárias na URL alcançavam a API e podiam gerar estado vazio ou controles inconsistentes. |
-| `src/mocks/database.ts` | Filtra itens persistidos inválidos, NFTs inexistentes, edição desconhecida e quantidade inválida durante restore. | Um carrinho parcialmente corrompido ainda podia quebrar a renderização. |
-| `tests/migration.spec.ts` | Acrescenta regressão para descartar itens ruins e preservar o item válido. | Impede retorno do erro de migração. |
+| `src/mocks/database.ts` | Filtra itens persistidos inválidos durante restore e repara o carrinho novamente antes de cada uso. | Impede que uma estrutura antiga ou incompleta alcance os handlers. |
+| `src/lib/api.ts` e `src/Shell.tsx` | Normalizam respostas do carrinho e calculam o contador somente sobre uma lista válida. | Uma resposta sem `items` não pode mais interromper a renderização. |
+| `tests/migration.spec.ts` | Cobre respostas sem `items`, dados antigos e itens corrompidos. | Impede retorno do erro de migração e normalização. |
 | `tests/compliance.spec.ts` | Acrescenta dez cenários de conformidade executados em desktop e mobile. | Cobre isolamento, credenciais, logout, estoque/cupom, carteira, concorrência, histórico, URL inválida, 404, reconexão e axe. |
 | `README.md` | Atualiza quantidade de testes, caminho do relatório e evidências finais. | Mantém a documentação alinhada ao resultado realmente executado. |
 | `reports/playwright/` e `reports/lighthouse/` | Regenera relatórios sobre a árvore final. | Preserva evidência verificável da última rodada. |
@@ -139,8 +140,8 @@ Playwright 1.64.0, Lighthouse 13.5.0 e Chromium do Playwright.
 | `npm ci` em cópia limpa | **APROVADO** — instalação apenas pelo lockfile. |
 | `npm run typecheck` | **APROVADO** — zero erros. |
 | `npm run lint` | **APROVADO** — zero erros. |
-| `npm run build` | **APROVADO** — 2.083 módulos; aviso não bloqueante para chunk principal de 509,63 kB (163,16 kB gzip). |
-| `npm run test:e2e` | **APROVADO** — 72/72 em 2,3 min; rodada final sem falhas. |
+| `npm run build` | **APROVADO** — 2.083 módulos; aviso não bloqueante para chunk principal de 510,01 kB (163,30 kB gzip). |
+| `npm run test:e2e` | **APROVADO** — 74/74 em 2,2 min; rodada final sem falhas. |
 | Regressão visual dentro da suíte | **APROVADO** — 12/12 em 390, 768 e 1440 px. |
 | axe-core | **APROVADO** — nenhuma violação em início, detalhe e checkout, desktop/mobile. |
 | `npm audit --audit-level=moderate` | **APROVADO** — 0 vulnerabilidades. |

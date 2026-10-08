@@ -32,6 +32,8 @@ function Frame() {
     cart = useCart(),
     path = useRouterState({ select: (state) => state.location.pathname });
   const [controls, setControls] = useState(false);
+  const cartItems = Array.isArray(cart.data?.items) ? cart.data.items : [];
+  const cartQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const auth = path === "/login" || path === "/signup",
     account = ["/profile", "/wallets", "/favorites"].includes(path),
     receipt = path.startsWith("/order/");
@@ -91,17 +93,10 @@ function Frame() {
             <Link
               to="/cart"
               className="header-cart"
-              aria-label={`Carrinho com ${cart.data?.items.reduce((sum, item) => sum + item.quantity, 0) || 0} itens`}
+              aria-label={`Carrinho com ${cartQuantity} itens`}
             >
               <ShoppingCart size={24} />
-              {!!cart.data?.items.length && (
-                <span>
-                  {cart.data.items.reduce(
-                    (sum, item) => sum + item.quantity,
-                    0,
-                  )}
-                </span>
-              )}
+              {!!cartItems.length && <span>{cartQuantity}</span>}
             </Link>
             {session ? (
               <>
@@ -127,7 +122,11 @@ function Frame() {
             )}
           </div>
         </header>
-        <main id="main" tabIndex={-1} className={path.startsWith("/nft/") ? "detail-main" : undefined}>
+        <main
+          id="main"
+          tabIndex={-1}
+          className={path.startsWith("/nft/") ? "detail-main" : undefined}
+        >
           <Suspense
             fallback={
               <div className="detail-loading">
