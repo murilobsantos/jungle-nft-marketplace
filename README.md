@@ -84,6 +84,8 @@ As medianas de três medições por página/perfil e os relatórios individuais 
 
 Uma rodada dedicada de comparação visual passou nos 12 cenários: [relatório visual](reports/playwright-visual/index.html).
 
+A prancha oficial do Figma também foi conferida com os 15 exports locais e comparada lado a lado com a versão publicada. As principais adaptações estão documentadas em [AUDIT.md](AUDIT.md).
+
 As imagens de referência dos testes não incluem o nome do sistema operacional, permitindo reutilizar as mesmas baselines em Windows e Linux com as fontes locais e o Chromium do Playwright.
 
 A execução final não teve falhas. Traces, vídeos e capturas são retidos automaticamente em `test-results/` quando um teste falha.

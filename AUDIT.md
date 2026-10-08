@@ -103,7 +103,7 @@ Os status abaixo usam exatamente a classificação definida na missão.
 | `order.updated` | 10 tempo real / alta | Atualiza apenas o pedido do usuário; estados terminais não regridem. | Nenhuma conhecida. | **COMPLETO E VALIDADO** |
 | Desconexão e reconexão Socket.IO | 10 tempo real / alta | Reconecta, emite `reconcile`, invalida recursos ativos e recupera pedido/detalhe sem refresh manual. | Nenhuma conhecida. | **COMPLETO E VALIDADO** |
 | Responsividade 390/768/1440 | 20 visual / alta | Doze snapshots de início, detalhe, carrinho e pagamento passaram; teste de overflow passou. | Frames sem layers limitam medição geométrica exata. | **COMPLETO E VALIDADO** |
-| Fidelidade visual ao Figma | 20 / alta | Identidade, assets, tipografia, cores e composição foram comparadas manualmente com 15 exports locais. | Algumas telas mobile foram estendidas para comportar os fluxos funcionais; snapshots comparam contra a baseline da implementação, não contra layers do Figma. | **PARCIAL** |
+| Fidelidade visual ao Figma | 20 / alta | A prancha oficial foi conferida com os 15 exports locais e comparada lado a lado com a versão publicada. Identidade, assets, tipografia, cores e composição permanecem consistentes. | Algumas telas mobile foram estendidas para comportar os fluxos funcionais; não houve inspeção de medidas por layers. | **PARCIAL** |
 | Assets e fontes locais | 20 visual / média | Artes derivadas dos frames e Roboto Mono local; nenhuma dependência visual remota. | Nenhuma conhecida. | **COMPLETO E VALIDADO** |
 | Teclado, foco e diálogos | 5 a11y / alta | Focus trap e retorno do foco pelo Radix; E2E de teclado e foco passou. | Nenhuma conhecida. | **COMPLETO E VALIDADO** |
 | Semântica, labels, alt, contraste e feedback | 5 a11y / alta | Seis varreduras axe sem violações; Lighthouse A11y 100; feedback usa roles e regiões acessíveis. | Nenhuma violação automática conhecida. | **COMPLETO E VALIDADO** |
@@ -167,7 +167,7 @@ Relatórios individuais e ambiente: `reports/lighthouse/README.md` e
 
 | Severidade | Risco | Impacto | Mitigação antes da entrega |
 |---|---|---|---|
-| **MÉDIA** | Fidelidade não foi medida contra layers do Figma; algumas telas mobile têm adaptações funcionais. | Pode haver desconto no critério visual mesmo com identidade consistente e snapshots estáveis. | Fazer uma última comparação manual lado a lado nos três breakpoints, se houver acesso ao arquivo editável. |
+| **MÉDIA** | A comparação final confirmou diferenças de hierarquia no detalhe e no pagamento mobile. | Pode haver desconto no critério visual, embora desktop, identidade e componentes estejam próximos das referências. | Comparação manual concluída; preservar os fluxos validados e evitar uma reestruturação arriscada antes da entrega. |
 | **BAIXA** | Detalhe mobile ficou exatamente na meta 90 e o chunk principal gera aviso de 500 kB. | Máquinas mais lentas podem produzir variação de performance. | Evitar mudanças grandes antes da entrega; se houver tempo, medir o custo antes de dividir novos chunks. |
 | **BAIXA** | Validação acessível foi principalmente automatizada. | axe/Lighthouse não substituem leitor de tela e zoom manual completos. | Fazer smoke com teclado, NVDA e zoom 200% nas rotas críticas. |
 | **BAIXA** | Socket.IO e autenticação são simulações no navegador. | Não representam segurança ou concorrência de um backend real. | Nenhuma ação para o desafio; a limitação já está documentada e é compatível com o escopo. |
@@ -191,5 +191,5 @@ oficial nem promessa de aprovação.
 - [x] Publicar o código revisado.
 - [x] Repetir o smoke de rotas diretas, MSW e Socket.IO no novo deploy.
 - [x] Confirmar que o link canônico do deploy está no README.
-- [ ] Se possível, fazer a comparação final lado a lado com o Figma editável e
-      um smoke manual com leitor de tela/zoom.
+- [x] Fazer a comparação final lado a lado com as referências atuais do Figma.
+- [ ] Fazer um smoke manual com leitor de tela e zoom 200%.
