@@ -1,7 +1,7 @@
 ﻿import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Heart, Search, ShoppingCart, SlidersHorizontal } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { rest } from "../lib/api";
 import type { CatalogSearch, Nft } from "../domain/types";
 import { displayEth } from "../domain/money";
@@ -139,6 +139,8 @@ export function Catalog({ search = defaults }: { search?: CatalogSearch }) {
   const [filters, setFilters] = useState(false),
     [draft, setDraft] = useState(search.q),
     [range, setRange] = useState(search.max);
+  useEffect(() => setDraft(search.q), [search.q]);
+  useEffect(() => setRange(search.max), [search.max]);
   const query = useQuery({
     queryKey: ["catalog", search],
     queryFn: ({ signal }) => rest.catalog(search, signal),

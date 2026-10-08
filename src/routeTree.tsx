@@ -35,28 +35,57 @@ const OrderPage = lazy(() =>
 );
 import { rest } from "./lib/api";
 import type { CatalogSearch } from "./domain/types";
+import { wei } from "./domain/money";
+const allowedCategories = new Set([
+  "Arte digital",
+  "Fotografia",
+  "Música",
+  "Arte 3D",
+  "Colecionáveis",
+  "Generativa",
+  "Jogos",
+  "Assinaturas",
+  "Utilidade",
+]);
+const allowedNetworks = new Set(["Ethereum", "Polygon", "Solana"]);
+const validList = (value: unknown, allowed: Set<string>) =>
+  typeof value === "string"
+    ? value
+        .split(",")
+        .filter((item) => allowed.has(item))
+        .join(",")
+    : "";
+const validPrice = (value: unknown, fallback: string) => {
+  const candidate = String(value);
+  return /^\d+(\.\d{1,18})?$/.test(candidate) && wei(candidate) <= wei("12.30")
+    ? candidate
+    : fallback;
+};
 const catalog = createRoute({
   getParentRoute: () => root,
   path: "/",
   validateSearch: (
     input: SearchSchemaInput & Partial<CatalogSearch>,
-  ): CatalogSearch => ({
-    ...defaults,
-    q: typeof input.q === "string" ? input.q : "",
-    categories: typeof input.categories === "string" ? input.categories : "",
-    networks: typeof input.networks === "string" ? input.networks : "",
-    sort: ["recent", "price-asc", "price-desc"].includes(String(input.sort))
-      ? String(input.sort)
-      : "recent",
-    tab: ["all", "new", "trending"].includes(String(input.tab))
-      ? String(input.tab)
-      : "all",
-    min: /^\d+(\.\d{1,18})?$/.test(String(input.min)) ? String(input.min) : "0",
-    max: /^\d+(\.\d{1,18})?$/.test(String(input.max))
-      ? String(input.max)
-      : "12.30",
-    page: Math.max(1, Math.min(1000, Math.floor(Number(input.page) || 1))),
-  }),
+  ): CatalogSearch => {
+    const min = validPrice(input.min, "0");
+    const max = validPrice(input.max, "12.30");
+    const validRange = wei(min) <= wei(max);
+    return {
+      ...defaults,
+      q: typeof input.q === "string" ? input.q : "",
+      categories: validList(input.categories, allowedCategories),
+      networks: validList(input.networks, allowedNetworks),
+      sort: ["recent", "price-asc", "price-desc"].includes(String(input.sort))
+        ? String(input.sort)
+        : "recent",
+      tab: ["all", "new", "trending"].includes(String(input.tab))
+        ? String(input.tab)
+        : "all",
+      min: validRange ? min : "0",
+      max: validRange ? max : "12.30",
+      page: Math.max(1, Math.min(1000, Math.floor(Number(input.page) || 1))),
+    };
+  },
   component: () => {
     const search = catalog.useSearch();
     return <Catalog search={search} />;

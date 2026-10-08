@@ -124,16 +124,32 @@ function restore(value: unknown): Database {
   const fresh = seed();
   if (!record(value)) return fresh;
 
+  const nfts =
+    Array.isArray(value.nfts) && value.nfts.length
+      ? (value.nfts as Nft[])
+      : fresh.nfts;
+  const nftIds = new Set(nfts.map((nft) => nft.id));
+  const editions = new Set(["1/1", "1/10", "1/50", "ABERTA"]);
+
   const carts: Record<string, Cart> = {};
   if (record(value.carts)) {
     for (const [owner, candidate] of Object.entries(value.carts)) {
       if (!record(candidate)) continue;
       carts[owner] = {
         items: Array.isArray(candidate.items)
-          ? (candidate.items as Cart["items"])
+          ? candidate.items.filter(
+              (item): item is Cart["items"][number] =>
+                record(item) &&
+                typeof item.nftId === "string" &&
+                nftIds.has(item.nftId) &&
+                typeof item.edition === "string" &&
+                editions.has(item.edition) &&
+                typeof item.quantity === "number" &&
+                Number.isInteger(item.quantity) &&
+                item.quantity > 0,
+            )
           : [],
-        version:
-          typeof candidate.version === "number" ? candidate.version : 1,
+        version: typeof candidate.version === "number" ? candidate.version : 1,
         coupon: typeof candidate.coupon === "string" ? candidate.coupon : "",
       };
     }
@@ -158,10 +174,7 @@ function restore(value: unknown): Database {
     : [];
 
   return {
-    nfts:
-      Array.isArray(value.nfts) && value.nfts.length
-        ? (value.nfts as Nft[])
-        : fresh.nfts,
+    nfts,
     users: users as User[],
     sessions: record(value.sessions)
       ? (value.sessions as Database["sessions"])

@@ -37,7 +37,7 @@ As contas têm carteiras iniciais diferentes. Cadastro permite criar outra conta
 | `npm run audit` | Três medições Lighthouse em início/detalhe, desktop/mobile |
 | `npm run format` | Formatar o código |
 
-Para atualizar as imagens após uma alteração visual intencional: `npm run test:visual -- --update-snapshots`. Baselines ficam em `tests/visual.spec.ts-snapshots/`; relatórios em `playwright-report/`, traces/vídeos das falhas em `test-results/`. Auditorias HTML/JSON e medianas ficam em `reports/lighthouse/`.
+Para atualizar as imagens após uma alteração visual intencional: `npm run test:visual -- --update-snapshots`. Baselines ficam em `tests/visual.spec.ts-snapshots/`; relatórios em `reports/playwright/`, traces/vídeos das falhas em `test-results/`. Auditorias HTML/JSON e medianas ficam em `reports/lighthouse/`.
 
 ## Configuração
 
@@ -62,7 +62,7 @@ Cupom de sucesso: `KURIO10`. Cupom expirado: `EXPIRADO`. Qualquer outro código 
 
 ## Documentação e entrega
 
-[ARCHITECTURE.md](ARCHITECTURE.md) registra cache, sessão, carrinho, precisão monetária, idempotência, reconciliação e adaptações das referências. [API.md](API.md) descreve REST e eventos. Frames originais ficam em `references/figma/`; imagens utilizadas e fontes são locais. Os recortes podem ser reproduzidos no Windows com `scripts/extract-assets.ps1`.
+[ARCHITECTURE.md](ARCHITECTURE.md) registra cache, sessão, carrinho, precisão monetária, idempotência, reconciliação e adaptações das referências. [API.md](API.md) descreve REST e eventos. [AUDIT.md](AUDIT.md) contém a matriz de conformidade, correções, validações e riscos da auditoria final. Frames originais ficam em `references/figma/`; imagens utilizadas e fontes são locais. Os recortes podem ser reproduzidos no Windows com `scripts/extract-assets.ps1`.
 
 `vercel.json` e `public/_redirects` permitem fallback SPA para acesso direto e refresh em Vercel/Netlify. O build publicado deve usar mocks ativos e servir `mockServiceWorker.js` como JavaScript da mesma origem.
 
@@ -78,18 +78,15 @@ As artes originais têm versões WebP e recortes de 400 px para os cards. Para r
 
 ### Verificação da entrega
 
-Build e ESLint concluídos. Playwright: **50 testes passaram**, incluindo a migração de dados persistidos e 12 comparações visuais em desktop, tablet e mobile, sem atualização de snapshots na rodada final. O relatório HTML está em [reports/playwright/index.html](reports/playwright/index.html). As baselines representam a implementação revisada a partir dos frames PNG; não são uma comparação automática contra layers do Figma.
+Build, TypeScript e ESLint concluídos. Playwright: **72 testes passaram**, incluindo migração defensiva de dados persistidos, isolamento entre contas, histórico do catálogo, URL inválida, reconexão Socket.IO, axe-core e 12 comparações visuais em desktop, tablet e mobile, sem atualização de snapshots na rodada final. O relatório HTML está em [reports/playwright/index.html](reports/playwright/index.html). As baselines representam a implementação revisada a partir dos frames PNG; não são uma comparação automática contra layers do Figma.
 
 As medianas de três medições por página/perfil e os relatórios individuais estão em [reports/lighthouse/README.md](reports/lighthouse/README.md).
 
 Uma rodada dedicada de comparação visual passou nos 12 cenários: [relatório visual](reports/playwright-visual/index.html).
 
-
 As imagens de referência dos testes não incluem o nome do sistema operacional, permitindo reutilizar as mesmas baselines em Windows e Linux com as fontes locais e o Chromium do Playwright.
 
-
-A execução final não teve falhas. Traces, vídeos e capturas são retidos automaticamente em test-results/ quando um teste falha.
-
+A execução final não teve falhas. Traces, vídeos e capturas são retidos automaticamente em `test-results/` quando um teste falha.
 
 Medianas Lighthouse finais: início mobile 91, detalhe mobile 90, desktop 100 em ambas as páginas. Accessibility, Best Practices e SEO: 100 em todos os perfis. LCP/CLS/TBT, relatórios individuais e análise constam no relatório de auditoria.
 
